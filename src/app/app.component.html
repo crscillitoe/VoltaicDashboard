@@ -6,19 +6,34 @@
           <div class="name">
             Task Name
           </div>
-          <div class="score">
-            Score
+          <div class="progress-bar">
+            <div class="score previous-score">
+            </div>
+            <div class="score current-score">
+              Score
+            </div>
+            <div class="score final-score">
+            </div>
           </div>
         </div>
-        <div class="display" style="height: 5px; padding-top: 0px; padding-bottom: 0px;" [style.background]="'black'" [style.color]="'white'">
-          </div>
+        <div class="display" style="height: 5px; padding-top: 0px; padding-bottom: 0px;" [style.background]="'black'"
+          [style.color]="'white'">
+        </div>
         <ng-container *ngFor="let mapping of idMappings.keys()">
           <div class="display" [style.background]="getRankColor(getRank(mapping))">
             <div class="name">
               {{mapping}}
             </div>
-            <div class="score">
-              {{getScore(mapping)}}/{{getNextScore(mapping)}}
+            <div class="progress-bar" [style.background]="getProgressBar(mapping)">
+              <div class="score previous-score">
+                {{getPreviousScore(mapping)}}
+              </div>
+              <div class="score current-score">
+                {{getScore(mapping)}}
+              </div>
+              <div class="score final-score">
+                {{getNextScore(mapping)}}
+              </div>
             </div>
           </div>
         </ng-container>

@@ -15,6 +15,13 @@ export class AppComponent {
     ["Jade", "#cefdce"],
     ["Master", "#f8c0ed"],
   ]);
+
+  rankBarColors: Map<string, string> = new Map<string, string>([
+    ["Platinum", "#2fcfc2"],
+    ["Diamond", "#50C8FF"],
+    ["Jade", "#85fa85"],
+    ["Master", "#f8c0ed"],
+  ]);
   scores: Map<string, any> = new Map<string, any>();
   idMappings: Map<string, any> = new Map<string, any>([
     [
@@ -128,6 +135,20 @@ export class AppComponent {
     return "Unranked";
   }
 
+  getPreviousScore(name: string) {
+    const thresholds = this.idMappings.get(name);
+    let score = this.scores.get(name);
+    if (!score) return 0;
+
+    score = +score;
+    if (score >= thresholds.master) return thresholds.master;
+    if (score >= thresholds.jade) return thresholds.jade;
+    if (score >= thresholds.diamond) return thresholds.diamond;
+    if (score >= thresholds.plat) return thresholds.plat;
+
+    return 0;
+  }
+
   getNextScore(name: string) {
     const thresholds = this.idMappings.get(name);
     let score = this.scores.get(name);
@@ -142,9 +163,31 @@ export class AppComponent {
     return thresholds.plat;
   }
 
-  getRankColor(rank: string) {
-    const color = this.rankColors.get(rank);
-    if (!color) return "#000000";
+  getProgressBar(name: string) {
+    const previous = this.getPreviousScore(name);
+    const target = this.getNextScore(name);
+    const current = this.getScore(name);
+    const rank = this.getRank(name);
+
+    const difference = target - previous;
+    const distance = target - current;
+
+    const progress = Math.floor((distance/difference) * 100)
+    return `linear-gradient(to right, ${this.getNextRankColor(rank, this.rankBarColors)} ${100 - progress}%, ${this.getRankColor(rank)} ${100 - progress}%)`;
+  }
+
+  getNextRankColor(rank: string, colorMap: Map<string, string>=this.rankColors) {
+    if (rank === "Unranked") return this.getRankColor("Platinum", colorMap);
+    if (rank === "Platinum") return this.getRankColor("Diamond", colorMap);
+    if (rank === "Diamond") return this.getRankColor("Jade", colorMap);
+    if (rank === "Jade") return this.getRankColor("Master", colorMap);
+
+    return this.getRankColor("Master", colorMap);
+  }
+
+  getRankColor(rank: string, colorMap: Map<string, string>=this.rankColors) {
+    const color = colorMap.get(rank);
+    if (!color) return "#FFFFFF";
 
     return color;
   }

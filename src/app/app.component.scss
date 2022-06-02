@@ -3,13 +3,24 @@
   padding: 10px;
   display: flex;
   justify-content: space-between;
-  width: 500px;
+  width: 1000px;
 }
 
 .scores {
   display: flex;
   justify-content: center;
   height: 98vh;
+}
+
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 600px;
+}
+
+.name {
+  width: 400px;
+  border-right: solid black 5px;
 }
 
 .vertical {
@@ -20,6 +31,7 @@
 }
 
 .score {
-  font-family: 'Roboto', sans-serif;
+  width: 100px;
+  text-align: center;
   font-family: 'Roboto Mono', monospace;
 }
